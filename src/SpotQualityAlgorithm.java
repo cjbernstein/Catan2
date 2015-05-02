@@ -2,13 +2,13 @@
 
 
 public class SpotQualityAlgorithm {
-	double[] weightOfVertexNum; //test learning= try to determine something meaningful about the weight of vertex for winning	
 	double[] weightOfAllFeats;
+	double[] numOfInteractions;
 	int numberOfGames;
 	
 	public SpotQualityAlgorithm(int numFeatures, int numGames){
-		weightOfVertexNum = new double[55];
 		weightOfAllFeats = new double[numFeatures];
+		numOfInteractions = new double[numFeatures];
 		for (int i = 0; i<weightOfAllFeats.length; i++){
 			weightOfAllFeats[i] = 0;
 		}
@@ -16,18 +16,19 @@ public class SpotQualityAlgorithm {
 	} 
 	
 	public void incrementVertexNumWeight (int v){
-		weightOfVertexNum[v] += .1;
-		System.out.println(weightOfVertexNum[v] );
+	//	weightOfVertexNum[v] += .1;
+		//System.out.println(weightOfVertexNum[v] );
 	}
 	
 	public void decrementVertexNumWeight (int v){
-		weightOfVertexNum[v] -= .1;
+	//	weightOfVertexNum[v] -= .1;
 	}
 	
 	public void winnersFeatures(int[] goodFeats){
 		for (int i = 0; i<goodFeats.length; i++){
 			if (goodFeats[i] == 1){
 				weightOfAllFeats[i] = weightOfAllFeats[i] + 1;
+				numOfInteractions[i] ++;
 			} 
 		}
 		//normalize();
@@ -36,7 +37,8 @@ public class SpotQualityAlgorithm {
 	public void loosersFeatures(int[] badFeats){
 		for (int i = 0; i<badFeats.length; i++){
 			if (badFeats[i] == 1){
-				weightOfAllFeats[i] -= 1;
+			//	weightOfAllFeats[i] -= 1;
+				//numOfInteractions[i]++;
 			} 
 		}
 		//normalize();
@@ -49,10 +51,13 @@ public class SpotQualityAlgorithm {
 		*/
 		for (int i=0; i<weightOfAllFeats.length; i++){
 			//we normalize instead of this
-			//weightOfAllFeats[i] = weightOfAllFeats[i]/numberOfGames;
+			weightOfAllFeats[i] = weightOfAllFeats[i]/numberOfGames;
 		}
 		for (int i=0; i<weightOfAllFeats.length; i++){
 			System.out.println("Weight of feature: "+i+" is "+weightOfAllFeats[i]);
+		}
+		for (int i=0; i<weightOfAllFeats.length; i++){
+			System.out.println("Num of interactions with feature: "+i+" is "+numOfInteractions[i]);
 		}
 	}
 

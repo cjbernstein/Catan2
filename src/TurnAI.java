@@ -44,7 +44,7 @@ public class TurnAI {
 	public void turn(int playerID){
 		p = playerID;
 		//if (p == smartPlayer){
-			smartTurn();
+			smartTurnWithoutDevCards();
 	/*	} else {
 			// check available actions
 			checkPossible(p);

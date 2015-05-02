@@ -12,8 +12,8 @@ public class PlayManyGames {
 			System.out.println("Can't open the file: Feature Data.txt");
 		}
 		
-		int numRuns = 10000;
-		SpotQualityAlgorithm spotQuality = new SpotQualityAlgorithm (59, numRuns);
+		int numRuns = 500;
+		SpotQualityAlgorithm spotQuality = new SpotQualityAlgorithm (69, numRuns);
 		for (int j=0; j<numRuns; j++){
 			boolean tryAgain = true;
 			RunGame gameRunner = new RunGame(4, false, true, false); //will NOT used a fixed board
@@ -42,19 +42,20 @@ public class PlayManyGames {
 				}
 			}
 			
-			
 			for (int i = 1; i<initialSettlementsAllPlayers.length; i++){
 				int [] playerStartSettlements = initialSettlementsAllPlayers[i];
 				int spot1 = playerStartSettlements[1];
 				int spot2 = playerStartSettlements[2];
 				if (i == winningPlayer){
-					saveDataAboutFeats(verticesInGraph[spot1], 1, writer);
-					saveDataAboutFeats(verticesInGraph[spot2], 1, writer);
-					learnAboutWinningVertex(verticesInGraph[spot1], spotQuality);
+					saveDataAboutFeats(verticesInGraph[spot1], 1, writer, theGraph);
+					saveDataAboutFeats(verticesInGraph[spot2], 1, writer, theGraph);
+					learnAboutWinningVertex(verticesInGraph[spot1], spotQuality, theGraph);
+					learnAboutWinningVertex(verticesInGraph[spot2], spotQuality, theGraph);
 				}  else if (i == worstPlayer){
-					saveDataAboutFeats(verticesInGraph[spot1], 0, writer);
-					saveDataAboutFeats(verticesInGraph[spot2], 0, writer);
-					learnAboutLosingVertex(verticesInGraph[spot1], spotQuality);
+					saveDataAboutFeats(verticesInGraph[spot1], 0, writer, theGraph);
+					saveDataAboutFeats(verticesInGraph[spot2], 0, writer, theGraph);
+					learnAboutLosingVertex(verticesInGraph[spot1], spotQuality, theGraph);
+					learnAboutLosingVertex(verticesInGraph[spot2], spotQuality, theGraph);
 				}
 			}
 		}
@@ -70,9 +71,9 @@ public class PlayManyGames {
 		//might require passing the entire board or information about player hand
 	}
 		
-	private static void saveDataAboutFeats(CatanVertex v, int winLoss, BufferedWriter writer){
+	private static void saveDataAboutFeats(CatanVertex v, int winLoss, BufferedWriter writer, GraphController g){
 		GetSpotFeatures feats = new GetSpotFeatures();
-		int[] features = feats.getFeaturesForVertex (v);
+		int[] features = feats.getFeaturesForVertex (v, g);
 		
 		//print stats in some meaningful way
 		if (writer != null){
@@ -92,15 +93,15 @@ public class PlayManyGames {
 		
 	}
 	
-	private static void learnAboutWinningVertex (CatanVertex v, SpotQualityAlgorithm spotQuality){
+	private static void learnAboutWinningVertex (CatanVertex v, SpotQualityAlgorithm spotQuality, GraphController g){
 		GetSpotFeatures feats = new GetSpotFeatures();
-		int[] features = feats.getFeaturesForVertex (v);
+		int[] features = feats.getFeaturesForVertex (v, g);
 		spotQuality.winnersFeatures(features);
 	}
 
-	private static void learnAboutLosingVertex (CatanVertex v, SpotQualityAlgorithm spotQuality){
+	private static void learnAboutLosingVertex (CatanVertex v, SpotQualityAlgorithm spotQuality, GraphController g){
 		GetSpotFeatures feats = new GetSpotFeatures();
-		int[] features = feats.getFeaturesForVertex (v);
+		int[] features = feats.getFeaturesForVertex (v, g);
 		spotQuality.loosersFeatures(features);
 	}
 		

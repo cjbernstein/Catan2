@@ -3,7 +3,9 @@ public class VisualizeAI {
 	
 	public static void main (String[] args){
 		//creates Player classes for each player and stores in players[]
-		RunGame gameRunner = new RunGame(4, false, true, true); 
+		RunGame gameRunner = new RunGame(4, false, true, true);
+		SpotQualityAlgorithm spotQuality = new SpotQualityAlgorithm (69, 1);
+		int winningPlayer = gameRunner.runGameWithAI(false);
 		
 		/* get the game state graphically*/
 		GraphController theGraph = gameRunner.gl.graph;
@@ -38,6 +40,51 @@ public class VisualizeAI {
 		}
 			
 		h.repaint();
-		
+
+		Player[] players = gameRunner.getPlayers();
+		int[][] initialSettlementsAllPlayers = gameRunner.getInitialPlayerSets();
+		int worstPlayer = 0;
+		int minVPs = 10;
+		for (int i = 1; i<players.length; i++){
+			if (i != winningPlayer){
+				int vps = players[i].victoryPoints;
+				if (vps< minVPs){
+					minVPs = vps;
+					worstPlayer = i;
+				}
+			}
+		}
+				
+		for (int i = 1; i<initialSettlementsAllPlayers.length; i++){
+			int [] playerStartSettlements = initialSettlementsAllPlayers[i];
+			int spot1 = playerStartSettlements[1];
+			int spot2 = playerStartSettlements[2];
+			if (i == winningPlayer){
+				learnAboutWinningVertex(verticesInGraph[spot1], spotQuality, theGraph);
+			}  else if (i == worstPlayer){
+				learnAboutLosingVertex(verticesInGraph[spot1], spotQuality, theGraph);
+			}
+		}
+
+		spotQuality.printFeatureWeights();
 	}
+		
+	private static void getFeaturesWithGameState(CatanVertex v){
+		//might require passing the entire board or information about player hand
+	}
+		
+	
+	private static void learnAboutWinningVertex (CatanVertex v, SpotQualityAlgorithm spotQuality, GraphController g){
+		GetSpotFeatures feats = new GetSpotFeatures();
+		int[] features = feats.getFeaturesForVertex (v, g);
+		spotQuality.winnersFeatures(features);
+	}
+
+	private static void learnAboutLosingVertex (CatanVertex v, SpotQualityAlgorithm spotQuality, GraphController g){
+		GetSpotFeatures feats = new GetSpotFeatures();
+		int[] features = feats.getFeaturesForVertex (v, g);
+		spotQuality.loosersFeatures(features);
+	}
+		
+
 }
