@@ -64,7 +64,7 @@ public class PlayManyGames {
 		} catch (Exception e){
 			System.out.println("Can't close!");
 		}
-		spotQuality.printFeatureWeights();
+	//	spotQuality.printFeatureWeights();
 	}
 		
 	private static void getFeaturesWithGameState(CatanVertex v){

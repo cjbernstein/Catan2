@@ -82,7 +82,7 @@ public class GetSpotFeatures {
 	
 	public int[] getFeaturesForVertex (CatanVertex v, GraphController g){
 		graph = g;
-		boolean debug = true;
+		boolean debug = false;
 		int[] toReturn = new int[71];
 		calculateScarcestResource();
 		
