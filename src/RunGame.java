@@ -13,7 +13,7 @@ public class RunGame {
 	TurnOrderManager order;
 	public  GameLogic gl;
 	private  FrontEndInterface fei;
-	int endGameCondition = 5;
+	int endGameCondition = 7;
 	public int[][] board;
 	
 	private  Player[] players;
@@ -35,7 +35,7 @@ public class RunGame {
 	private boolean firstRoundSET;
 	private int firstRoundRoadCounter;
 
-	private int turnMax = 100;
+	private int turnMax = 250;
 	
 	int[][] initialSettlementsForPlayers;
 	
