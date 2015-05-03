@@ -75,13 +75,15 @@ public class GetSpotFeatures {
 	 * 66 = brick is plentiful
 	 * 67 = wood is plentiful
 	 * 68 = sheep is plentiful 
+	 * 69 = built on scarcest
+	 * 70 = built on most plentiful
 	 * 
 	 */
 	
 	public int[] getFeaturesForVertex (CatanVertex v, GraphController g){
 		graph = g;
 		boolean debug = true;
-		int[] toReturn = new int[69];
+		int[] toReturn = new int[71];
 		calculateScarcestResource();
 		
 		if (rock(v)){
@@ -280,16 +282,22 @@ public class GetSpotFeatures {
 			toReturn[64] = 1;
 		}
 		if (mostCommonResource == translator.Wheat){
-			toReturn[64] = 1;
+			toReturn[65] = 1;
 		}
 		if (mostCommonResource == translator.Brick){
-			toReturn[64] = 1;
+			toReturn[66] = 1;
 		}
 		if (mostCommonResource == translator.Wood){
-			toReturn[64] = 1;
+			toReturn[67] = 1;
 		}
 		if (mostCommonResource == translator.Sheep){
-			toReturn[64] = 1;
+			toReturn[68] = 1;
+		}
+		if (onScarceResource(v)){
+			toReturn[69] = 1;
+		}
+		if (onPlentifulResource(v)){
+			toReturn[70] = 1;
 		}
 		if (debug){
 			System.out.println("features for vertex "+v.vertexNumber);

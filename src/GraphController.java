@@ -7,7 +7,7 @@ import java.util.Random;
 public class GraphController {
 	static CatanVertex[] vertices; //pointers to the vertex objects in graph (connected by edge objects)
 	static Tile[] tiles;
-	boolean debug = true; 
+	boolean debug = false; 
 	
 	public GraphController (CatanVertex[] v, Tile[] t){
 		vertices = v;

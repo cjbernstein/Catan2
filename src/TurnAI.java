@@ -44,7 +44,7 @@ public class TurnAI {
 	public void turn(int playerID){
 		p = playerID;
 		//if (p == smartPlayer){
-			smartTurnWithoutDevCards();
+			smartTurn();
 	/*	} else {
 			// check available actions
 			checkPossible(p);
@@ -303,29 +303,30 @@ public class TurnAI {
 	}
 	
 	private boolean canUse3to1Port(){
+		trade3to1Counter = 0;
 		if (!gl.checkUsePort(p, 0)){
 			return false;
 		} else {
 			resourcesToTrade3to1 = new int[5];
 			trade3to1Counter = 0;
 			if (gl.hasResourcesToTrade(p, translator.Wheat, 3)){
-				resourcesToTrade3to1[tradeCounter] = translator.Wheat;
+				resourcesToTrade3to1[trade3to1Counter] = translator.Wheat;
 				trade3to1Counter ++;
 			}
 			if (gl.hasResourcesToTrade(p, translator.Rock, 3)){
-				resourcesToTrade3to1[tradeCounter] = translator.Rock;
+				resourcesToTrade3to1[trade3to1Counter] = translator.Rock;
 				trade3to1Counter ++;
 			}
 			if (gl.hasResourcesToTrade(p, translator.Brick, 3)){
-				resourcesToTrade3to1[tradeCounter] = translator.Brick;
+				resourcesToTrade3to1[trade3to1Counter] = translator.Brick;
 				trade3to1Counter ++;
 			}
 			if (gl.hasResourcesToTrade(p, translator.Sheep, 3)){
-				resourcesToTrade3to1[tradeCounter] = translator.Sheep;
+				resourcesToTrade3to1[trade3to1Counter] = translator.Sheep;
 				trade3to1Counter ++;
 			}
 			if (gl.hasResourcesToTrade(p, translator.Wood, 3)){
-				resourcesToTrade3to1[tradeCounter] = translator.Wood;
+				resourcesToTrade3to1[trade3to1Counter] = translator.Wood;
 				trade3to1Counter ++;
 			}
 			return trade3to1Counter > 0;
