@@ -21,6 +21,8 @@ public class GraphController {
 	 */
 	public boolean checkPlaceSettlement(int v, Player p, boolean printError){
 		CatanVertex vert = vertices[v];
+		DecisionTree dt = new DecisionTree (this);
+		dt.isSpotGood(v);
 		if (vert.getSettlementType() != 0) { 
 			//ensure vertex is empty
 			if(printError){

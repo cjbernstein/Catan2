@@ -4,6 +4,8 @@ import java.util.Random;
 public class TurnAI {
 	private RunGame rg;
 	private GameLogic gl;
+	private DecisionTree dt;
+	int playerWithDT;
 	int[] possibleActions;
 	Random generator;
 	
@@ -32,51 +34,20 @@ public class TurnAI {
 	private ResourceTranslator translator = new ResourceTranslator();
 	int smartPlayer = 1;
 	
-	public TurnAI(RunGame r, GameLogic g, boolean printMessages){
+	public TurnAI(RunGame r, GameLogic g, boolean printMessages, int smartPlayer){
 		rg = r;
 		gl = g;
 		possibleActions = new int[10];
 		generator =  new Random();
 		printActions = printMessages;
 		debug = printMessages;
+		dt = new DecisionTree(g.graph);
+		playerWithDT = smartPlayer;
 	}
 	
 	public void turn(int playerID){
 		p = playerID;
-		//if (p == smartPlayer){
-			smartTurn();
-	/*	} else {
-			// check available actions
-			checkPossible(p);
-			//pick action randomly
-			if (actionCount == 0){
-				return;
-			}
-			int randIndex = generator.nextInt(actionCount);
-			int actionToTake = possibleActions[randIndex];
-			if (printActions){
-				System.out.println("Taking action "+actionToTake);
-			}
-			
-			switch (actionToTake) {
-				case (1):
-					settle(p);
-					break;
-				case (2):
-					buildCity(p);
-					break;
-				case (3):
-					buildRoad(p);
-					break;
-				case (4):
-					makeTrade(p);
-					break;
-				case(11):
-					buyDevCard(p);
-					break;
-			}
-		}
-		*/
+		smartTurn();
 	}
 	
 	private void smartTurn(){
@@ -181,6 +152,22 @@ public class TurnAI {
 	}
 	
 	private void settle(){
+		if (p== playerWithDT){
+			if (p == playerWithDT){
+				int[] newSettlementVertices = new int[54];
+				int newSetVertCount = 0;
+				for (int i = 0; i<settlementVertices.length; i++){
+					if (dt.isSpotGood(settlementVertices[i])){
+						newSettlementVertices[newSetVertCount] = settlementVertices[i];
+						newSetVertCount ++;
+					}
+				}
+				if (newSetVertCount > 0 ){
+					settlementVertices = newSettlementVertices;
+					settlementVerticesCount = newSetVertCount;
+				}
+			}
+		} 
 		rg.setActionType (1);
 		int randIndex = generator.nextInt(settlementVerticesCount);
 		int vertexToBuild = settlementVertices[randIndex];
@@ -201,6 +188,20 @@ public class TurnAI {
 	}
 	
 	private void buildCity (){
+		if (p == playerWithDT){
+			int[] newCityVertices = new int[54];
+			int newCityVertCount = 0;
+			for (int i = 0; i<cityVertices.length; i++){
+				if (dt.isSpotGood(cityVertices[i])){
+					newCityVertices[newCityVertCount] = cityVertices[i];
+					newCityVertCount ++;
+				}
+			}
+			if (newCityVertCount > 0 ){
+				cityVertices = newCityVertices;
+				cityVerticesCount = newCityVertCount;
+			}
+		}
 		rg.setActionType(2);
 		int cityIndex = generator.nextInt(cityVerticesCount);
 		int cityToBuild = cityVertices[cityIndex];
@@ -234,6 +235,20 @@ public class TurnAI {
 	
 	private void buildSmartRoad(){
 		//choose the road that will get you to a buildable spot 
+		if (p == playerWithDT){
+			int[][] newRoadVertices = new int[54*54][2];
+			int newRoadVerticesCount = 0;
+			for (int i = 0; i<roadVerticesCount; i++){
+				if (dt.isSpotGood(roadVertices[i][0]) || dt.isSpotGood(roadVertices[i][0]) ){
+					newRoadVertices[newRoadVerticesCount] = roadVertices[i];
+					newRoadVerticesCount ++;
+				}
+			}
+			if (newRoadVerticesCount > 0 ){
+				roadVertices = newRoadVertices;
+				roadVerticesCount =newRoadVerticesCount;
+			}
+		}
 		for (int i = 0; i<roadVerticesCount; i++){
 			int v1 = roadVertices[i][0];
 			int v2 =  roadVertices[i][1];

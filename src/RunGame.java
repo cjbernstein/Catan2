@@ -35,7 +35,7 @@ public class RunGame {
 	private boolean firstRoundSET;
 	private int firstRoundRoadCounter;
 
-	private int turnMax = 250;
+	private int turnMax = 1000;
 	
 	int[][] initialSettlementsForPlayers;
 	
@@ -78,19 +78,22 @@ public class RunGame {
 			//FEI will draw the graph
 			fei = new FrontEndInterface (this, board, numPlayers, ports, true);
 			fei.currentPlayerID = currentPlayerID;
+			/*
 			if (AI){
 				np = new TurnAI(this, gl, printRunningMessage);
 			}
+			*/
 		} 
 	}
 	
 	//returns player ID of winning player
 	public int runGameWithAI(boolean print){
+		int aiWithDT = 1;
 		int numTurns = 0;
 		printRunningMessage = print;
 		// run the game without graphics and with a random AI making all choices
-		InitialPlacementAI initial = new InitialPlacementAI(this, gl, print, false /*don't set the initial spots */);
-		TurnAI turn = new TurnAI(this, gl, print);
+		InitialPlacementAI initial = new InitialPlacementAI(this, gl, print, false /*don't set the initial spots */, aiWithDT);
+		TurnAI turn = new TurnAI(this, gl, print, aiWithDT);
 		int settlementPosition;
 		initialSettlementsForPlayers = new int[5][3]; //each player stores {playerID, spot1, spot2}
 		//do something to store start settlements and winners

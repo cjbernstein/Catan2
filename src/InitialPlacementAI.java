@@ -4,6 +4,8 @@ public class InitialPlacementAI {
 	Random generator;
 	RunGame rg;
 	GameLogic gl;
+	private DecisionTree dt;
+	int playerWithDT;
 	boolean fixedInitialPlacement;
 	
 	int[] settlementVertices;
@@ -12,11 +14,13 @@ public class InitialPlacementAI {
 	int roadVerticesCount;
 	boolean debug = false; 
 	
-	public InitialPlacementAI (RunGame r, GameLogic g, boolean printMessages, boolean f){
+	public InitialPlacementAI (RunGame r, GameLogic g, boolean printMessages, boolean f, int smartPlayer){
 		generator =  new Random();
 		rg = r;
 		gl = g;
 		fixedInitialPlacement = f;
+		dt = new DecisionTree(g.graph);
+		playerWithDT = smartPlayer;
 	}
 	
 	// actions for first round (settlement and road placement) ///
@@ -43,6 +47,20 @@ public class InitialPlacementAI {
 					}
 				}
 			}
+			if (p == playerWithDT){
+				int[] newSettlementVertices = new int[54];
+				int newSetVertCount = 0;
+				for (int i = 0; i<settlementVertices.length; i++){
+					if (dt.isSpotGood(settlementVertices[i])){
+						newSettlementVertices[newSetVertCount] = settlementVertices[i];
+						newSetVertCount ++;
+					}
+				}
+				if (newSetVertCount >0){
+					settlementVertices = newSettlementVertices;
+					settlementVerticesCount = newSetVertCount;
+				}
+			}
 			int randIndex = generator.nextInt(settlementVerticesCount);
 			int vertexToBuild = settlementVertices[randIndex];
 			return vertexToBuild;
@@ -50,6 +68,9 @@ public class InitialPlacementAI {
 		
 		public void firstRoundRoad(int p){
 			findLegalRound1Road(p);
+			if (roadVerticesCount == 0){
+				return;
+			}
 			int randIndex = generator.nextInt(roadVerticesCount);
 			int v1 = roadVertices[randIndex][0];
 			int v2 =  roadVertices[randIndex][1];

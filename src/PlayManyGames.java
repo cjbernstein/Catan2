@@ -12,7 +12,11 @@ public class PlayManyGames {
 			System.out.println("Can't open the file: Feature Data.txt");
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> juliaedholm/master
 =======
 
 >>>>>>> juliaedholm/master
